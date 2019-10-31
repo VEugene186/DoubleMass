@@ -5,6 +5,7 @@
 #include <string>
 #include "DoubleMass.h"
 #include "RungeKutta.h"
+#include "BifurcationTree.h"
 #include <omp.h>
 
 const char * gnuplot = "\"/usr/bin/gnuplot\" -persist";
@@ -17,6 +18,7 @@ void saveToFile(const char * fName, valarray<double> & x, valarray<double> & y,
 void startMenuLoop();
 
 void IntegrateDoubleMass();
+void CalculateTree();
 void multitreadingOptions();
 void clearStream();
 
@@ -40,6 +42,7 @@ void multitreadingOptions() {
 void startMenuLoop() {
     vector<string> items;
     items.push_back("1 - Integrate DoubleMass");
+    items.push_back("2 - Calculate Tree");
     items.push_back("9 - Multi-threading options");
     items.push_back("0 - Exit");
 
@@ -61,6 +64,9 @@ void startMenuLoop() {
         switch (selected) {
         case 1:
             IntegrateDoubleMass();
+            break;
+        case 2:
+            CalculateTree();
             break;
         case 5:
             multitreadingOptions();
@@ -189,3 +195,30 @@ void IntegrateDoubleMass() {
     pclose(pipe);
 }
 
+void CalculateTree() {
+    DoubleMass odes;
+    odes.setParameter(0, 1.0);//A
+    odes.setParameter(1, 1.0);//B
+    odes.setParameter(2, 5.0);//J
+    odes.setParameter(3, 1.0);//mp
+    odes.setParameter(4, 1.0);//r
+    odes.setParameter(5, 2.0);//R
+    odes.setParameter(6, 2.0 * M_PI);//Omega
+    odes.setParameter(7, 0.0);//Gamma0
+    odes.setParameter(8, 0.1);//epsGamma
+    odes.setParameter(9, 1.6);//delta
+    odes.setParameter(10, 0.1);//mu1
+    odes.setParameter(11, 0.1);//mu2
+    odes.setParameter(12, 0.01);//mu3
+
+    double ip[6];
+    ip[0] = 6.31088;
+    ip[1] = -1.1736;
+    ip[2] = 23.3835;
+    ip[3] = 0.0;
+    ip[4] = 0.0;
+    ip[5] = 0.0;
+    BifurcationTree bt;
+    bt.calculate(&odes, 8, 0.1, 0.3, 201, ip, 100, 5);
+    bt.saveToFile("test.csv");
+}
