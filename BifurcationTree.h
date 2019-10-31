@@ -14,13 +14,13 @@ public:
     ~BifurcationTree();
 
     void calculate(Equation * eqs, int parNum, double begin, double end, int N, const double * initialPoint, int preIters, int saveCount);
-    void saveToFile(const char * fileName);
+    void saveToFile(const char * fileName, int dim);
 private:
     void add(double value, const double * q, int dim);
 private:
     RungeKutta method_;
     vector<double> parValues_;
-    vector<valarray<double > > points_;
+    vector<double*> points_;
 };
 
 #endif

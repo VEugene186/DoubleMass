@@ -46,16 +46,15 @@ void BifurcationTree::calculate(Equation * eqs, int parNum, double begin, double
 
 void BifurcationTree::add(double value, const double * q, int dim) {
     parValues_.push_back(value);
-    valarray<double> tmp(dim);
+    points_.push_back(new double[dim]);
     for (int i = 0; i < dim; i++) {
-        tmp[i] = q[i];
+        points_.back()[i] = q[i];
     }
-    points_.push_back(tmp);
 }
 
-void BifurcationTree::saveToFile(const char * fileName) {
+void BifurcationTree::saveToFile(const char * fileName, int dim) {
     int N = (int)parValues_.size();
-    int dim = (int)points_[0].size();
+    printf("%d | %d\n", N, dim);
     FILE * f = fopen(fileName, "w");
     for (int n = 0; n < N; n++) {
         fprintf(f, "%.15lg", parValues_[n]);

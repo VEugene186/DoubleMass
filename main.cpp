@@ -220,5 +220,5 @@ void CalculateTree() {
     ip[5] = 0.0;
     BifurcationTree bt;
     bt.calculate(&odes, 8, 0.1, 0.3, 201, ip, 100, 5);
-    bt.saveToFile("test.csv");
+    bt.saveToFile("test.csv", odes.getDim());
 }
