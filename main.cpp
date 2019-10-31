@@ -220,5 +220,19 @@ void CalculateTree() {
     ip[5] = 0.0;
     BifurcationTree bt;
     bt.calculate(&odes, 8, 0.1, 0.3, 201, ip, 100, 5);
-    bt.saveToFile("test.csv", odes.getDim());
+    bt.saveToFile("tree_points.csv", odes.getDim());
+
+    FILE * pipe = popen(gnuplot, "w");
+    fprintf(pipe, 
+            "set terminal pngcairo enhanced size 800, 600 font \'Times, 16\'\n"
+            "set style line 12 dashtype 2 lc \'black\'\n"
+            "set grid xtics, ytics ls 12\n"
+            "set output \'tree_p1.png\'\n"
+            "plot \'tree_points.csv\' using 1:2 notitle w p pt 7 ps 0.05 lc \'black\'\n"
+            "set output \'tree_p2.png\'\n"
+            "plot \'tree_points.csv\' using 1:3 notitle w p pt 7 ps 0.05 lc \'black\'\n"
+            "set output \'tree_M.png\'\n"
+            "plot \'tree_points.csv\' using 1:4 notitle w p pt 7 ps 0.05 lc \'black\'\n");
+    pclose(pipe);
+
 }
