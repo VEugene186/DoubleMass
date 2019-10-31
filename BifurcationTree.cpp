@@ -5,15 +5,18 @@ BifurcationTree::BifurcationTree() {
 
 }
 
-BifurcationTree::~BifurcationTree() {
-
+BifurcationTree::~BifurcationTree() { 
+    int N = (int)parValues_.size();
+    for (int n = 0; n < N; n++) {
+        delete [] points_[n];
+    }
 }
 
 void BifurcationTree::calculate(Equation * eqs, int parNum, double begin, double end, int N, const double * initialPoint, int preIters, int saveCount) {
     int dim = eqs->getDim();
     method_.init(eqs);
-    parValues_.resize(N);
-    points_.resize(N);
+    //parValues_.resize(N);
+    //points_.resize(N);
 
     double step = (end - begin) / (N - 1);
     double * q0 = new double[dim];
@@ -54,7 +57,7 @@ void BifurcationTree::add(double value, const double * q, int dim) {
 
 void BifurcationTree::saveToFile(const char * fileName, int dim) {
     int N = (int)parValues_.size();
-    printf("%d | %d\n", N, dim);
+    //printf("%d | %d\n", N, dim);
     FILE * f = fopen(fileName, "w");
     for (int n = 0; n < N; n++) {
         fprintf(f, "%.15lg", parValues_[n]);
